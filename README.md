@@ -4,6 +4,10 @@ Check gem dependencies of rails apps and generate report. It is executed automat
 
 [https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/)
 
+Here is the last builds output:
+
+[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/lastBuild/console](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/lastBuild/console)
+
 ## Installation
 
     gem install gem_version_check
