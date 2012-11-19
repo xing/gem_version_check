@@ -72,25 +72,27 @@ module GemVersionCheck
     end
 
     def to_s
-      output = ""
+      result = ""
       @report.result.each do |project|
-        output << "Project: #{project.name}" + "\n"
+        dep = ""
+        found_invalid = false
         project.report.each do |dependency|
-          output << " * #{dependency.name}: "
+          dep << " * #{dependency.name}: "
           if dependency.used?
             if dependency.valid?
-              output << "#{green}#{dependency.expected_version} ✓"
+              dep << "#{green}#{dependency.expected_version} ✓"
             else 
-              output << "#{dependency.expected_version} != #{red}#{dependency.version}"
+              found_invalid = true
+              dep << "#{dependency.expected_version} != #{red}#{dependency.version}"
             end
-            output << black + "\n"
+            dep << black + "\n"
           else
-            output << "not used\n"
+            dep << "not used\n"
           end
         end
-        output << "\n"
+        result << "Project: #{found_invalid ? red : green}#{project.name}#{black}" + "\n" + dep
       end
-      output
+      result
     end
 
     def black
