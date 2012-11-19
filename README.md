@@ -1,6 +1,8 @@
 # XING Gem Version Checker
 
-Check gem dependencies of rails apps and generate report.
+Check gem dependencies of rails apps and generate report. It is executed automatically on jenkins:
+
+[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/)
 
 ## Installation
 
