@@ -1,12 +1,20 @@
 {
+  "rails": "3.2.9",
+
+  "rest_cake": "0.8.15",
   "rails_core_tools": "2.7.4",
   "rails_templates": "3.2.0",
-  "rest_cake": "0.8.15",
-  "rails": "3.2.9",
+
+
   "logjam_agent": "0.5.9",
+  "time_bandit": "0.2.2",
+  "typhoeus": "0.2.4.104",
+
   "legacy_perl_backend": "1.1.0",
   "omniture_tracking": "0.1.9",
-  "passenger": "3.0.11",
   "text_resources": "0.2.16",
-  "xing_urn": "0.1.4"
+  "xing_urn": "0.1.4",
+
+  "passenger": "3.0.11"
+
 }
