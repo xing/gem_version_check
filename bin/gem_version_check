@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+
+require "rubygems"
+require "gem_version_check"
+
+report = GemVersionCheck::Report.new
+report.generate
+
+puts GemVersionCheck::PrettyPrintReport.new(report)
+# puts GemVersionCheck::JSONReport.new(report).to_json

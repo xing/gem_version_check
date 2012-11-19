@@ -1,0 +1,13 @@
+{
+  "projects": [
+    { "name": "Jobs", "repository": "jobs-team/jobs" },
+    { "name": "Events", "repository": "events-team/events" },
+    { "name": "Companies", "repository": "companies/companies" },
+    { "name": "Best Offers", "repository": "companies/best_offers" },
+
+    { "name": "Topics", "repository": "si/topics" },
+    { "name": "Talent Manager", "repository": "cra-team/cra" },
+    { "name": "Projects", "repository": "freelancer-marketplace-team/flmp" },
+    { "name": "Activities", "repository": "architects/activities" }
+  ]
+}
