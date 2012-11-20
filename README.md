@@ -2,11 +2,11 @@
 
 Check gem dependencies of rails apps and generate report. It is executed automatically on jenkins:
 
-[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/)
+[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check_jobs/](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check_jobs/)
 
 Here is the last builds output:
 
-[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/lastBuild/console](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check/lastBuild/console)
+[https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check_jobs/lastBuild/console](https://jenkins.dc.xing.com/jenkins/view/gems/job/gem_version_check_jobs/lastBuild/console)
 
 ## Installation
 
@@ -16,39 +16,34 @@ Here is the last builds output:
 
 Commandline Usage
 
-    gem_version_check
+    GITHUB_HOST=source.xing.com gem_version_check jevents-team/events
+
+    gem_version_check https://source.xing.com/events-team/events/raw/master/Gemfile.lock
 
 ## Configuration
 
-### Projects
-
-Projects are listed in `projects.json`:
-
-    {
-      "projects": [
-        { "name": "Jobs", "repository": "jobs-team/jobs" },
-        { "name": "Events", "repository": "events-team/events" },
-        { "name": "Companies", "repository": "companies/companies" }
-      ]
-    }
+Use GITHUB_HOST environment variable if you use Enterprise Github.
 
 ### Version Checks
 
 Checks are listed in `checks.json`:
 
-    {
-      "rails_core_tools": "2.7.4",
-      "rails_templates": "3.2.0",
-      "rest_cake": "0.8.15",
-      "rails": "3.2.9"
-    }
+    [
+      "rails",
+      "rest_cake",
+      "rails_core_tools",
+      "rails_templates",
+      "logjam_agent",
+      "time_bandits",
+      "typhoeus",
+    ]
 
 ## Example Report
 
 ### Pretty Print
 puts GemVersionCheck::PrettyPrintReport.new(report)
 
-    Project: Jobs
+    Project: events-team/events
      * rails_core_tools: 2.7.4 ✓
      * rails_templates: 3.2.0 ✓
      * rest_cake: 0.8.15 ✓
@@ -58,18 +53,6 @@ puts GemVersionCheck::PrettyPrintReport.new(report)
      * omniture_tracking: 0.1.9 ✓
      * passenger: 3.0.11 ✓
      * text_resources: 0.2.16 != 0.2.15
-     * xing_urn: 0.1.4 ✓
-
-    Project: Events
-     * rails_core_tools: 2.7.4 != 2.6.2
-     * rails_templates: 3.2.0 != 3.1.1
-     * rest_cake: 0.8.15 ✓
-     * rails: 3.2.9 ✓
-     * logjam_agent: 0.5.9 != 0.5.7
-     * legacy_perl_backend: 1.1.0 != 1.1.3
-     * omniture_tracking: 0.1.9 != 0.1.7
-     * passenger: 3.0.11 ✓
-     * text_resources: 0.2.16 != 0.1.3
      * xing_urn: 0.1.4 ✓
 
 ### JSON Format
