@@ -26,8 +26,7 @@ task :report do
     puts GemVersionCheck::Formatter::PrettyPrint.new(result)
     result.check_failed? ? exit(1) : exit(0)
   else
-    result = report.generate_all
-    puts GemVersionCheck::Formatter::PrettyPrint.new(result)
+    puts "No project given: rake PROJECT=my-gh-name/myproject"
     exit(0)
   end
 end
