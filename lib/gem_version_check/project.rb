@@ -3,54 +3,64 @@ require "net/http"
 
 module GemVersionCheck
   class Project
-    attr_reader :name, :repository
+    attr_reader :repository, :report
 
-    def initialize(name, repository)
-      @name = name
-      @repository = repository
+    def initialize(project, checks)
+      @project = project
+      @checks = checks
+    end
+
+    def name
+      @project
     end
 
     def report
       @report ||= generate_report
     end
 
-    def lock_file
-      @lock_file ||= Bundler::LockfileParser.new(download_gemfile_lock)
-    end
-
     def generate_report
+      @check_failed = false
       result = []
-      checks.each do |key, value|
+      @checks.each do |key, value|
         dependency = Dependency.new(key, value)
         dependency.check(lock_file)
+        @check_failed = true unless dependency.valid?
         result << dependency
       end
       result
     end
 
+    def check_failed?
+      @check_failed
+    end
+
+    def lock_file
+      @lock_file ||= Bundler::LockfileParser.new(download_gemfile_lock(repository))
+    end
+
+    def repository
+      @repository ||= begin
+        if @project =~ /^http(s)?:\/\//
+          @project
+        else
+          gemfile_lock_url
+        end
+      end
+    end
+
     private
 
-    def checks
-      @checks ||= ActiveSupport::JSON.decode(IO.read(checks_file))
-    end
-
-    def checks_file
-      File.expand_path("../../../checks.json", __FILE__)
-    end
-
     def gemfile_lock_url
-      "https://source.xing.com/#{@repository}/raw/master/Gemfile.lock"
+      "https://#{GemVersionCheck.configuration.github_host}/#{@project}/raw/master/Gemfile.lock"
     end
 
-    def download_gemfile_lock
-      uri = URI.parse(gemfile_lock_url)
-      puts "Retrieving #{gemfile_lock_url}..."
+    def download_gemfile_lock(repository)
+      uri = URI.parse(repository)
+      puts "Retrieving #{repository}..."
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.scheme == 'https'
       request = Net::HTTP::Get.new(uri.request_uri)
       http.request(request).body
-    rescue Http::HTTPClientError, Http::HTTPServerError => e
-      raise GemfileError.new("Error retrieving Gemfile.lock from #{uri}")
     end
   end
 end

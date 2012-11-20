@@ -5,8 +5,13 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require "rubygems"
 require "gem_version_check"
 
-report = GemVersionCheck::Report.new
-report.generate
+result = nil
+if (ARGV[0])
+  result = GemVersionCheck::Report.new.generate(ARGV[0])
+  puts GemVersionCheck::Formatter::PrettyPrint.new(result)
+else 
+  exit(0, "No Gemfile.lock url given")
+end
 
-puts GemVersionCheck::PrettyPrintReport.new(report)
-# puts GemVersionCheck::JSONReport.new(report).to_json
+
+

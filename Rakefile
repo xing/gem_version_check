@@ -21,9 +21,15 @@ require 'rake'
 task :report do
   require "gem_version_check"
   report = GemVersionCheck::Report.new
-  report.generate
-
-  puts GemVersionCheck::PrettyPrintReport.new(report)
+  if ENV["PROJECT"]
+    result = report.generate(ENV["PROJECT"])
+    puts GemVersionCheck::Formatter::PrettyPrint.new(result)
+    result.check_failed? ? exit(1) : exit(0)
+  else
+    result = report.generate_all
+    puts GemVersionCheck::Formatter::PrettyPrint.new(result)
+    exit(0)
+  end
 end
 
 task :default => :report
