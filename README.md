@@ -16,7 +16,7 @@ Here is the last builds output:
 
 Commandline Usage
 
-    GITHUB_HOST=source.xing.com gem_version_check jevents-team/events
+    GITHUB_HOST=source.xing.com gem_version_check events-team/events
 
     gem_version_check https://source.xing.com/events-team/events/raw/master/Gemfile.lock
 
