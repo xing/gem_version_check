@@ -5,7 +5,7 @@ module GemVersionCheck
         @report_result = Array(report_result)
       end
 
-      def to_json
+      def format
         result = []
         Array(@report_result).each do |project|
           project_hash = project_hash(project)

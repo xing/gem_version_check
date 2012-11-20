@@ -6,7 +6,7 @@ module GemVersionCheck
         @report_result = Array(report_result)
       end
 
-      def to_s
+      def format
         result = ""
         @report_result.each do |project|
           dep = ""
