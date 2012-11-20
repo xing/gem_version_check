@@ -21,7 +21,7 @@ module GemVersionCheck
             puts " * #{gem_name}: #{spec.version.to_s}"
             checks[gem_name] = spec.version.to_s
           else
-            puts "Couldn't find gem #{gem_name} in any source. Maybe a typo or gem can't be found on gems.xing.com?"
+            puts " * #{gem_name}: not found (Maybe a typo?)"
           end
         end
         checks
