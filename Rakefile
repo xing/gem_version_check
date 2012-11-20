@@ -27,7 +27,7 @@ task :report do
     result.check_failed? ? exit(1) : exit(0)
   else
     puts "No project given: rake PROJECT=my-gh-name/myproject"
-    exit(0)
+    exit(1)
   end
 end
 
