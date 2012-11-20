@@ -16,7 +16,4 @@ module GemVersionCheck
     end
 
   end
-
-  
-
 end
