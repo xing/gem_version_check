@@ -15,25 +15,3 @@ Bundler::GemHelper.class_eval do
   end
 end
 Rake::Task['release'].comment.to_s.sub!('Rubygems', "gems.xing.com")
-
-require 'rake'
-
-task :report do
-  require "gem_version_check"
-
-  GemVersionCheck.configuration = {
-    :github_host => ENV["GITHUB_HOST"]
-  }
-
-  report = GemVersionCheck::Report.new
-  if ENV["PROJECT"]
-    result = report.generate(ENV["PROJECT"])
-    puts GemVersionCheck::Formatter::PrettyPrint.new(result)
-    result.check_failed? ? exit(1) : exit(0)
-  else
-    puts "No project given: rake PROJECT=my-gh-name/myproject"
-    exit(1)
-  end
-end
-
-task :default => :report
