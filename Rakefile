@@ -20,6 +20,11 @@ require 'rake'
 
 task :report do
   require "gem_version_check"
+
+  GemVersionCheck.configuration = {
+    :github_host => ENV["GITHUB_HOST"]
+  }
+
   report = GemVersionCheck::Report.new
   if ENV["PROJECT"]
     result = report.generate(ENV["PROJECT"])
