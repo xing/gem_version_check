@@ -9,15 +9,4 @@ GemVersionCheck.configuration = {
   :github_host => ENV["GITHUB_HOST"]
 }
 
-result = nil
-if (ARGV[0])
-  result = GemVersionCheck::Report.new.generate(ARGV[0])
-  puts GemVersionCheck::Formatter::PrettyPrint.new(result).format
-  result.check_failed? ? exit(1) : exit(0)
-else 
-  puts "No project given: gem_version_check my-gh-name/myproject"
-  exit(1)
-end
-
-
-
+GemVersionCheck::Cli.run(ARGV)

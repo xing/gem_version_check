@@ -9,11 +9,10 @@ module GemVersionCheck
     end
 
     def check(lock_file)
-      spec = lock_file.specs.find { |spec| spec.name == @name }
-      @used = !!spec
+      @version = spec_version(@name, lock_file)
+      @used = !!@version
       return unless used?
       
-      @version = spec.version.to_s
       @result = @expected_version == @version
     end
 
@@ -25,5 +24,15 @@ module GemVersionCheck
       @used
     end
 
+    private
+
+    def spec_version(name, lock_file)
+      spec = find_spec(name, lock_file)
+      spec ? spec.version.to_s : nil
+    end
+
+    def find_spec(name, lock_file)
+      lock_file.specs.find { |spec| spec.name == name }
+    end
   end
 end
