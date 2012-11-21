@@ -1,4 +1,4 @@
-source 'http://gems.xing.com'
+source 'http://rubygems.org'
 
-# Specify your gem's dependencies in text_resources.gemspec
+# Specify your gem's dependencies in gem_version_check.gemspec
 gemspec
