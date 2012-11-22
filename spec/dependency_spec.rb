@@ -5,7 +5,7 @@ module GemVersionCheck
   describe Dependency do
 
     context "#check" do
-      let(:lock_file) { Bundler::LockfileParser.new(lock_file_content("Gemfile.lock")) }
+      let(:lock_file) { Lockfile.new(lock_file_content("Gemfile.lock")) }
 
       let(:dependency) { Dependency.new("activesupport", "3.2.9") }
       let(:invalid_dependency) { Dependency.new("activesupport", "3.2.10") }

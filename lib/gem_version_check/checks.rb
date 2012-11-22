@@ -3,8 +3,8 @@ module GemVersionCheck
   class Checks
     include Enumerable
 
-    def initialize(gem_names = nil)
-      @gem_names = gem_names || configured_checks
+    def initialize(gem_names)
+      @gem_names = gem_names
     end
 
     def each(&block)
@@ -26,16 +26,6 @@ module GemVersionCheck
         end
         checks
       end
-    end
-
-    private
-
-    def configured_checks
-      ActiveSupport::JSON.decode(IO.read(checks_file))
-    end
-
-    def checks_file
-      File.expand_path("../../../checks.json", __FILE__)
     end
 
   end

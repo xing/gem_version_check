@@ -8,6 +8,7 @@ def lock_file_content(filename)
 end
 
 RSpec.configure do |config|
+  config.mock_framework = :mocha
   config.before do
     GemVersionCheck.configuration = { :github_host => "github.com" }
   end

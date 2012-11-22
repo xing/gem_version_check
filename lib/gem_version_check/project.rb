@@ -1,19 +1,19 @@
 require "uri"
 require "net/http"
+require "net/https"
 
 module GemVersionCheck
   class Project
-    attr_reader :repository, :report
 
-    def self.generate_report(project_name, checks = nil)
-      project = Project.new(project_name, checks || Checks.new())
+    def self.generate_report(project_name, spec_names = nil)
+      project = Project.new(project_name, spec_names)
       project.report
       project
     end
 
-    def initialize(project, checks)
+    def initialize(project, spec_names = nil)
       @project = project
-      @checks = checks
+      @spec_names = spec_names
     end
 
     def name
@@ -27,11 +27,12 @@ module GemVersionCheck
     def generate_report
       @check_failed = false
       result = []
-      @checks.each do |key, value|
-        dependency = Dependency.new(key, value)
+      with_progress_bar(spec_names) do |spec_name|
+        dependency = Dependency.new(spec_name)
         dependency.check(lock_file)
-        @check_failed = true unless dependency.valid?
         result << dependency
+
+        @check_failed = true unless dependency.valid?
       end
       result
     end
@@ -41,45 +42,34 @@ module GemVersionCheck
     end
 
     def lock_file
-      @lock_file ||= Bundler::LockfileParser.new(download_gemfile_lock(repository))
-    end
-
-    def repository
-      @repository ||= begin
-        if @project =~ /^http(s)?:\/\//
-          @project
-        else
-          gemfile_lock_url
-        end
+      @lock_file ||= begin
+        content = LockfileFetcher.new(@project).content
+        Lockfile.new(content)
       end
     end
 
     private
 
-    # github.com redirects github.com/user/project/raw/master/Gemfile.lock to raw.github.com/user/project/master/Gemfile.lock
-    # github enterprise does not redirect
-    # TODO: change if github enterprise redirects too
-    def gemfile_lock_url
-      if GemVersionCheck.configuration.github_host == "github.com"
-        "https://raw.#{GemVersionCheck.configuration.github_host}/#{@project}/master/Gemfile.lock"
-      else
-        "https://#{GemVersionCheck.configuration.github_host}/#{@project}/raw/master/Gemfile.lock"
+    def with_progress_bar(elements)
+      pb = ProgressBar.new("Fetch specs", lock_file.total) if display_status?
+      elements.each do |el|
+        yield el
+        pb.inc if display_status?
       end
+      pb.clear if display_status?
     end
 
-    def download_gemfile_lock(repository)
-      uri = URI.parse(repository)
-      body = request(uri)
-      raise GemfileLockNotFoundError.new(repository) if body.nil?
-      body
+    def display_status?
+      GemVersionCheck.configuration.show_progress
     end
 
-    def request(uri)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true if uri.scheme == 'https'
-      request = Net::HTTP::Get.new(uri.request_uri)
-      response = http.request(request)
-      response.code == "200" ? response.body : nil
+    def spec_names
+      Array(@spec_names).any? ? @spec_names : all_spec_names
     end
+
+    def all_spec_names
+      lock_file.spec_names
+    end
+
   end
 end

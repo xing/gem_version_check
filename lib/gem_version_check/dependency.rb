@@ -1,15 +1,17 @@
+require "rubygems"
+
 module GemVersionCheck
   class Dependency
 
     attr_reader :name, :expected_version, :version
 
-    def initialize(name, expected_version)
+    def initialize(name, expected_version = nil)
       @name = name
-      @expected_version = expected_version
+      @expected_version = expected_version || latest_version
     end
 
     def check(lock_file)
-      @version = spec_version(@name, lock_file)
+      @version = lock_file.version_for(@name)
       @used = !!@version
       return unless used?
       
@@ -24,15 +26,18 @@ module GemVersionCheck
       @used
     end
 
+    def latest_version
+      @latest_version ||= begin
+        spec = retrieve_spec
+        spec ? spec.version.to_s : nil
+      end
+    end
+
     private
 
-    def spec_version(name, lock_file)
-      spec = find_spec(name, lock_file)
-      spec ? spec.version.to_s : nil
+    def retrieve_spec
+      Gem.latest_spec_for(@name)
     end
 
-    def find_spec(name, lock_file)
-      lock_file.specs.find { |spec| spec.name == name }
-    end
   end
 end

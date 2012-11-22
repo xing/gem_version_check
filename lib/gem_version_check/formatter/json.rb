@@ -1,5 +1,8 @@
+require "json"
+
 module GemVersionCheck
   module Formatter
+
     class JSON
       def initialize(report_result)
         @report_result = Array(report_result)
@@ -7,14 +10,14 @@ module GemVersionCheck
 
       def format
         result = []
-        Array(@report_result).each do |project|
+        @report_result.each do |project|
           project_hash = project_hash(project)
           project.report.each do |dependency|
             project_hash[:dependencies] << dependency_hash(dependency)
           end
           result << project_hash
         end
-        result.to_json
+        ::JSON.pretty_generate(result)
       end
 
       private
@@ -32,8 +35,8 @@ module GemVersionCheck
           :name => dependency.name,
           :expected_version => dependency.expected_version,
           :version => dependency.version,
-          :used => dependency.used?,
-          :valid => dependency.valid?
+          :valid => dependency.valid?,
+          :used => dependency.used?
         }
       end
     end
