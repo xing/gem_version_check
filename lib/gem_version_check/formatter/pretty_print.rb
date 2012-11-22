@@ -8,23 +8,19 @@ module GemVersionCheck
       end
 
       def format
-        result = ""
-        @report_result.each do |project|
+        @report_result.inject("") do |result, project|
           result << "#{project_title(project)}\n#{format_project(project)}"
         end
-        result
       end
 
       private
 
       def format_project(project)
-        str = ""
-        project.report.each do |dependency|
-          str << dependency_listitem(dependency) do |dep|
+        project.report.inject("") do |result, dependency|
+          result << dependency_listitem(dependency) do |dep|
             dep.used? ? format_dependency(dependency) : "not used"
           end
         end
-        str
       end
 
       def project_title(project)

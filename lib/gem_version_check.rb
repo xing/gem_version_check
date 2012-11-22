@@ -9,6 +9,7 @@ require "gem_version_check/checks"
 require "gem_version_check/lockfile"
 require "gem_version_check/lockfile_fetcher"
 require "gem_version_check/configuration"
+require "gem_version_check/report"
 require "gem_version_check/formatter/json"
 require "gem_version_check/formatter/pretty_print"
 

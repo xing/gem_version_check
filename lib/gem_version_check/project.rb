@@ -5,13 +5,7 @@ require "net/https"
 module GemVersionCheck
   class Project
 
-    def self.generate_report(project_name, spec_names = nil)
-      project = Project.new(project_name, spec_names)
-      project.report
-      project
-    end
-
-    def initialize(project, spec_names = nil)
+    def initialize(project, spec_names = [])
       @project = project
       @spec_names = spec_names
     end
@@ -60,11 +54,11 @@ module GemVersionCheck
     end
 
     def display_status?
-      GemVersionCheck.configuration.show_progress
+      GemVersionCheck.configuration.show_progress_bar
     end
 
     def spec_names
-      Array(@spec_names).any? ? @spec_names : all_spec_names
+      @spec_names.any? ? @spec_names : all_spec_names
     end
 
     def all_spec_names
