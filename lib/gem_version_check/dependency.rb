@@ -7,7 +7,7 @@ module GemVersionCheck
 
     def initialize(name, expected_version = nil)
       @name = name
-      @expected_version = expected_version || latest_version
+      @expected_version = expected_version
     end
 
     def check(lock_file)
@@ -15,7 +15,7 @@ module GemVersionCheck
       @used = !!@version
       return unless used?
       
-      @result = @expected_version == @version
+      @result = expected_version == @version
     end
 
     def valid?
@@ -24,6 +24,14 @@ module GemVersionCheck
 
     def used?
       @used
+    end
+
+    def gem_not_found?
+      expected_version.nil?
+    end
+
+    def expected_version
+      @expected_version ||= latest_version
     end
 
     def latest_version

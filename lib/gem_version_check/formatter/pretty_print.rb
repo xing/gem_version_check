@@ -27,20 +27,26 @@ module GemVersionCheck
         "Project: #{project.check_failed? ? red : green}#{project.name}#{black}" 
       end
 
-      def dependency_listitem(dependency)
-        " * #{dependency.name}: #{ yield dependency }\n"
+      def dependency_listitem(dep)
+        " #{dep.name}: #{ yield dep }\n"
       end
 
-      def format_dependency(dependency)
-        result = dependency.valid? ? valid_dependency(dependency) : invalid_dependency(dependency)
+      def format_dependency(dep)
+        if dep.gem_not_found?
+          "not found"
+        elsif dep.valid?
+          valid_dependency(dep)
+        else
+          invalid_dependency(dep)
+        end
       end
 
-      def valid_dependency(dependency)
-        "#{green}#{dependency.expected_version} ✓#{black}"
+      def valid_dependency(dep)
+        "#{green}#{dep.expected_version} ✓#{black}"
       end
 
-      def invalid_dependency(dependency)
-        "#{dependency.expected_version} != #{red}#{dependency.version}#{black}"
+      def invalid_dependency(dep)
+        "#{dep.expected_version} != #{red}#{dep.version}#{black}"
       end
 
       def black
