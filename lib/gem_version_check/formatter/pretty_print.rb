@@ -46,7 +46,7 @@ module GemVersionCheck
       end
 
       def invalid_dependency(dep)
-        "#{dep.expected_version} != #{red}#{dep.version}#{black}"
+        "#{dep.expected_version} != #{red}✖ #{dep.version}#{black}"
       end
 
       def black
