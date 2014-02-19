@@ -5,12 +5,12 @@ module GemVersionCheck
   describe Dependency do
 
     context "#check" do
-      let(:lock_file) { Lockfile.new(lock_file_content("Gemfile.lock")) }
+      let(:lock_file) { Lockfile.new(lock_file_content("rails_app_example.lock")) }
 
-      let(:dependency) { Dependency.new("activesupport", "3.2.9") }
-      let(:invalid_dependency) { Dependency.new("activesupport", "3.2.10") }
-      let(:not_used_dependency) { Dependency.new("rails", "3.2.9") }
-      
+      let(:dependency) { Dependency.new("activesupport", "3.2.8") }
+      let(:invalid_dependency) { Dependency.new("activesupport", "3.2.9") }
+      let(:not_used_dependency) { Dependency.new("exceptionist", "3.2.8") }
+
       context "#valid?" do
         it "is valid if current version == expected version" do
           dependency.check(lock_file)
@@ -42,7 +42,7 @@ module GemVersionCheck
         end
 
         it "returns true if gem was not found on gems server" do
-          dep = Dependency.new("non_existing_gem") 
+          dep = Dependency.new("non_existing_gem")
           dep.expects(:retrieve_spec).returns(nil)
           dep.check(lock_file)
 

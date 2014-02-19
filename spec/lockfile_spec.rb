@@ -3,18 +3,18 @@ require 'spec_helper'
 
 module GemVersionCheck
   describe Lockfile do
-    let(:lockfile) { Lockfile.new(lock_file_content("Gemfile.lock")) }
+    let(:lockfile) { Lockfile.new(lock_file_content("rails_app_example.lock")) }
 
     describe "#spec_names" do
       it "returns all spec names" do
-        lockfile.spec_names.size.should == 12
+        lockfile.spec_names.size.should == 47
         lockfile.spec_names.should include("activesupport")
       end
     end
 
     describe "#version_for" do
       it "returns spec for name" do
-        lockfile.version_for("activesupport").should == "3.2.9"
+        lockfile.version_for("activesupport").should == "3.2.8"
       end
 
       it "returns nil if spec does not exist" do
@@ -24,7 +24,7 @@ module GemVersionCheck
 
     describe "#total" do
       it "returns total number of spec" do
-        lockfile.total.should == 12
+        lockfile.total.should == 47
       end
     end
   end

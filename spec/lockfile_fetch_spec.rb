@@ -21,7 +21,7 @@ module GemVersionCheck
     context "#lock_file" do
       it "downloads lock file content and returns lock_file" do
         fetcher = LockfileFetcher.new(redirect_url)
-        fetcher.expects(:request).returns(lock_file_content("Gemfile.lock"))
+        fetcher.expects(:request).returns(lock_file_content("rails_app_example.lock"))
         Bundler::LockfileParser.new(fetcher.content).specs.size.should > 0
       end
 
