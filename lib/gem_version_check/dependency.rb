@@ -5,17 +5,19 @@ module GemVersionCheck
 
     attr_reader :name, :expected_version, :version
 
-    def initialize(name, expected_version = nil)
+    def initialize(name, expected_version = nil, options = {})
       @name = name
       @expected_version = expected_version
+      @options = options
     end
 
     def check(lock_file)
       @version = lock_file.version_for(@name)
       @used = !!@version
       return unless used?
-      
+
       @result = expected_version == @version
+      # puts "#{@result} = #{expected_version} == #{@version}"
     end
 
     def valid?
@@ -43,8 +45,32 @@ module GemVersionCheck
 
     private
 
+    def ignore_major_version_change?
+      @options[:ignore_major_version_change]
+    end
+
+    def major_version
+      @version.split('.')[0]
+    end
+
     def retrieve_spec
-      Gem.latest_spec_for(@name)
+      if ignore_major_version_change?
+        retrieve_latest_major_version_spec
+      else
+        retrieve_latest_spec
+      end
+    end
+
+    def retrieve_latest_major_version_spec
+        dependency   = Gem::Dependency.new(name, "~>#{major_version}")
+        fetcher      = Gem::SpecFetcher.fetcher
+        spec_tuples, = fetcher.spec_for_dependency(dependency)
+        spec, = spec_tuples.last
+        spec
+    end
+
+    def retrieve_latest_spec
+        Gem.latest_spec_for(@name)
     end
 
   end

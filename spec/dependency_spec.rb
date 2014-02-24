@@ -21,6 +21,40 @@ module GemVersionCheck
           invalid_dependency.check(lock_file)
           invalid_dependency.should_not be_valid
         end
+
+        context "remote dependency" do
+          it "is valid when using the latest spec" do
+            dependency = Dependency.new("activesupport", nil)
+            dependency.expects(:retrieve_latest_spec).returns(Gem::Specification.new('activesupport', '3.2.8'))
+
+            dependency.check(lock_file)
+            dependency.should be_valid
+          end
+
+          it "is invalid when using the latest spec" do
+            dependency = Dependency.new("activesupport", nil)
+            dependency.expects(:retrieve_latest_spec).returns(Gem::Specification.new('activesupport', '3.2.9'))
+
+            dependency.check(lock_file)
+            dependency.should_not be_valid
+          end
+
+          it "is valid when ignoring the major version" do
+            dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
+            dependency.expects(:retrieve_latest_major_version_spec).returns(Gem::Specification.new('activesupport', '3.2.8'))
+
+            dependency.check(lock_file)
+            dependency.should be_valid
+          end
+
+          it "is invalid when ignoring the major version" do
+            dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
+            dependency.expects(:retrieve_latest_major_version_spec).returns(Gem::Specification.new('activesupport', '3.2.17'))
+
+            dependency.check(lock_file)
+            dependency.should_not be_valid
+          end
+        end
       end
 
       context "#used?" do
