@@ -2,5 +2,8 @@
 .ruby-version
 .ruby-gemset
 .rspec
+
 Gemfile.lock
+.bundle
+
 pkg
