@@ -22,7 +22,7 @@ module GemVersionCheck
       @check_failed = false
       result = []
       with_progress_bar(spec_names) do |spec_name|
-        dependency = Dependency.new(spec_name)
+        dependency = Dependency.new(spec_name, nil, ignore_major_version_change: ignore_major_version_change?)
         dependency.check(lock_file)
         result << dependency
 
@@ -55,6 +55,10 @@ module GemVersionCheck
 
     def display_status?
       GemVersionCheck.configuration.show_progress_bar
+    end
+
+    def ignore_major_version_change?
+      GemVersionCheck.configuration.ignore_major_version_change
     end
 
     def spec_names

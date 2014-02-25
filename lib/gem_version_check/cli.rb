@@ -14,7 +14,7 @@ module GemVersionCheck
       end
     end
 
-    private 
+    private
 
     def parse(params)
       options = {}
@@ -37,6 +37,10 @@ module GemVersionCheck
           options[:disable_progress_bar] = disable_progress_bar
         end
 
+        opts.on("--ignore-major-version-change", "Ignore changes of the major version") do |ignore_major_version_change|
+          options[:ignore_major_version_change] = ignore_major_version_change
+        end
+
         opts.on("--output-format FORMAT", %w(json pretty), "Output format") do |output_format|
           options[:output_format] = output_format
         end
@@ -56,7 +60,8 @@ module GemVersionCheck
 
       GemVersionCheck.configuration = {
         :github_host       => options[:host],
-        :show_progress_bar => !options[:disable_progress_bar]
+        :show_progress_bar => !options[:disable_progress_bar],
+        :ignore_major_version_change => options[:ignore_major_version_change]
       }
 
       [Array(project_names), options]
