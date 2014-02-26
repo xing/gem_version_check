@@ -33,6 +33,10 @@ module GemVersionCheck
           options[:host] = host
         end
 
+        opts.on("--sources my.gems.org,rubygems.org", String, "Sources to check for new gems versions") do |sources|
+          options[:sources] = sources
+        end
+
         opts.on("--disable-progress-bar", "Disable progress bar") do |disable_progress_bar|
           options[:disable_progress_bar] = disable_progress_bar
         end
@@ -60,6 +64,7 @@ module GemVersionCheck
 
       GemVersionCheck.configuration = {
         :github_host       => options[:host],
+        :sources           => options[:sources],
         :show_progress_bar => !options[:disable_progress_bar],
         :ignore_major_version_change => options[:ignore_major_version_change]
       }

@@ -54,6 +54,10 @@ module GemVersionCheck
     end
 
     def retrieve_spec
+      if GemVersionCheck.configuration.sources
+        Gem.sources = Gem::SourceList.from(GemVersionCheck.configuration.sources.split(','))
+      end
+
       if ignore_major_version_change?
         retrieve_latest_major_version_spec
       else
@@ -62,15 +66,15 @@ module GemVersionCheck
     end
 
     def retrieve_latest_major_version_spec
-        dependency   = Gem::Dependency.new(name, "~>#{major_version}")
-        fetcher      = Gem::SpecFetcher.fetcher
-        spec_tuples, = fetcher.spec_for_dependency(dependency)
-        spec, = spec_tuples.last
-        spec
+      dependency   = Gem::Dependency.new(name, "~>#{major_version}")
+      fetcher      = Gem::SpecFetcher.fetcher
+      spec_tuples, = fetcher.spec_for_dependency(dependency)
+      spec, = spec_tuples.last
+      spec
     end
 
     def retrieve_latest_spec
-        Gem.latest_spec_for(@name)
+      Gem.latest_spec_for(@name)
     end
 
   end
