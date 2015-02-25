@@ -67,6 +67,7 @@ module GemVersionCheck
 
     def retrieve_latest_major_version_spec
       dependency   = Gem::Dependency.new(name, "~>#{major_version}")
+      dependency.prerelease = 1 # allow dependency to be a prerelease
       fetcher      = Gem::SpecFetcher.fetcher
       spec_tuples, = fetcher.spec_for_dependency(dependency)
       spec, = spec_tuples.last
