@@ -54,6 +54,21 @@ module GemVersionCheck
             dependency.check(lock_file)
             dependency.should_not be_valid
           end
+
+          context "latest available dependency version is a prerelease" do
+            let(:spec_tuples) { %w(3.2.17 3.3.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
+
+            before :each do
+              Gem::SpecFetcher.any_instance.stubs(:spec_for_dependency).returns([ spec_tuples ])
+            end
+
+            it "retrieves prerelease as the latest major version available" do
+              dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
+              dependency.check(lock_file)
+
+              expect(dependency.latest_version).to eq("3.3.0.rc1")
+            end
+          end
         end
       end
 
