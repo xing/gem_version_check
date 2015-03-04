@@ -64,7 +64,9 @@ module GemVersionCheck
 
             it "retrieves prerelease as the latest major version available" do
               dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
+
               dependency.check(lock_file)
+              dependency.should_not be_valid
 
               expect(dependency.latest_version).to eq("3.3.0.rc1")
             end
