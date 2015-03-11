@@ -45,6 +45,10 @@ module GemVersionCheck
 
     private
 
+    def allow_prerelease_dependencies?
+      @options[:allow_prerelease_dependencies]
+    end
+
     def ignore_major_version_change?
       @options[:ignore_major_version_change]
     end
@@ -64,8 +68,7 @@ module GemVersionCheck
     def retrieve_latest_spec
       requirements = "~>#{major_version}" if ignore_major_version_change?
       dependency   = Gem::Dependency.new(name, requirements)
-      ## TODO: Make this change an option and off by default to keep the old behaviour
-      dependency.prerelease = 1 # allow dependency to be a prerelease
+      dependency.prerelease = 1 if allow_prerelease_dependencies?
       fetcher      = Gem::SpecFetcher.fetcher
       spec_tuples, = fetcher.spec_for_dependency(dependency)
       spec, = spec_tuples.last

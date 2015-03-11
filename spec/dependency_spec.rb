@@ -61,10 +61,10 @@ module GemVersionCheck
             end
 
             context "when not ignoring the major version" do
-            let(:spec_tuples) { %w(3.2.17 4.0.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
+            let(:spec_tuples) { %w(3.2.21 4.0.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
 
               it "retrieves prerelease as the latest version available" do
-                dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => false)
+                dependency = Dependency.new("activesupport", nil, :allow_prerelease_dependencies => true, :ignore_major_version_change => false)
 
                 dependency.check(lock_file)
                 dependency.should_not be_valid
@@ -77,7 +77,7 @@ module GemVersionCheck
             let(:spec_tuples) { %w(3.2.17 3.3.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
 
               it "retrieves prerelease as the latest major version available" do
-                dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
+                dependency = Dependency.new("activesupport", nil, :allow_prerelease_dependencies => true, :ignore_major_version_change => true)
 
                 dependency.check(lock_file)
                 dependency.should_not be_valid
