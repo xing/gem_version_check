@@ -41,7 +41,7 @@ module GemVersionCheck
 
           it "is valid when ignoring the major version" do
             dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
-            dependency.expects(:retrieve_latest_major_version_spec).returns(Gem::Specification.new('activesupport', '3.2.8'))
+            dependency.expects(:retrieve_latest_spec).returns(Gem::Specification.new('activesupport', '3.2.8'))
 
             dependency.check(lock_file)
             dependency.should be_valid
@@ -49,10 +49,42 @@ module GemVersionCheck
 
           it "is invalid when ignoring the major version" do
             dependency = Dependency.new("activesupport", nil, :ignore_major_version_change => true)
-            dependency.expects(:retrieve_latest_major_version_spec).returns(Gem::Specification.new('activesupport', '3.2.17'))
+            dependency.expects(:retrieve_latest_spec).returns(Gem::Specification.new('activesupport', '3.2.17'))
 
             dependency.check(lock_file)
             dependency.should_not be_valid
+          end
+
+          context "latest available dependency version is a prerelease" do
+            before :each do
+              Gem::SpecFetcher.any_instance.stubs(:spec_for_dependency).returns([ spec_tuples ])
+            end
+
+            context "when not ignoring the major version" do
+            let(:spec_tuples) { %w(3.2.21 4.0.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
+
+              it "retrieves prerelease as the latest version available" do
+                dependency = Dependency.new("activesupport", nil, :allow_prerelease_dependencies => true, :ignore_major_version_change => false)
+
+                dependency.check(lock_file)
+                dependency.should_not be_valid
+
+                expect(dependency.latest_version).to eq("4.0.0.rc1")
+              end
+            end
+
+            context "when ignoring the major version" do
+            let(:spec_tuples) { %w(3.2.17 3.3.0.rc1).map { |v| [ Gem::Specification.new('activesupport', v) ] } }
+
+              it "retrieves prerelease as the latest major version available" do
+                dependency = Dependency.new("activesupport", nil, :allow_prerelease_dependencies => true, :ignore_major_version_change => true)
+
+                dependency.check(lock_file)
+                dependency.should_not be_valid
+
+                expect(dependency.latest_version).to eq("3.3.0.rc1")
+              end
+            end
           end
         end
       end
@@ -84,6 +116,5 @@ module GemVersionCheck
         end
       end
     end
-
   end
 end

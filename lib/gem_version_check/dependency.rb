@@ -45,6 +45,10 @@ module GemVersionCheck
 
     private
 
+    def allow_prerelease_dependencies?
+      @options[:allow_prerelease_dependencies]
+    end
+
     def ignore_major_version_change?
       @options[:ignore_major_version_change]
     end
@@ -58,24 +62,17 @@ module GemVersionCheck
         Gem.sources = Gem::SourceList.from(GemVersionCheck.configuration.sources.split(','))
       end
 
-      if ignore_major_version_change?
-        retrieve_latest_major_version_spec
-      else
-        retrieve_latest_spec
-      end
+      retrieve_latest_spec
     end
 
-    def retrieve_latest_major_version_spec
-      dependency   = Gem::Dependency.new(name, "~>#{major_version}")
+    def retrieve_latest_spec
+      requirements = "~>#{major_version}" if ignore_major_version_change?
+      dependency   = Gem::Dependency.new(name, requirements)
+      dependency.prerelease = 1 if allow_prerelease_dependencies?
       fetcher      = Gem::SpecFetcher.fetcher
       spec_tuples, = fetcher.spec_for_dependency(dependency)
       spec, = spec_tuples.last
       spec
     end
-
-    def retrieve_latest_spec
-      Gem.latest_spec_for(@name)
-    end
-
   end
 end

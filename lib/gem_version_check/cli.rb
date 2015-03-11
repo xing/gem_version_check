@@ -45,6 +45,10 @@ module GemVersionCheck
           options[:ignore_major_version_change] = ignore_major_version_change
         end
 
+        opts.on("--allow-prerelease-dependencies", "Allow dependencies to be prereleases") do |allow_prerelease_dependencies|
+          options[:allow_prerelease_dependencies] = allow_prerelease_dependencies
+        end
+
         opts.on("--output-format FORMAT", %w(json pretty), "Output format") do |output_format|
           options[:output_format] = output_format
         end
@@ -63,10 +67,11 @@ module GemVersionCheck
       end.parse!(params)
 
       GemVersionCheck.configuration = {
-        :github_host       => options[:host],
-        :sources           => options[:sources],
-        :show_progress_bar => !options[:disable_progress_bar],
-        :ignore_major_version_change => options[:ignore_major_version_change]
+        :github_host                   => options[:host],
+        :sources                       => options[:sources],
+        :show_progress_bar             => !options[:disable_progress_bar],
+        :ignore_major_version_change   => options[:ignore_major_version_change],
+        :allow_prerelease_dependencies => options[:allow_prerelease_dependencies]
       }
 
       [Array(project_names), options]
