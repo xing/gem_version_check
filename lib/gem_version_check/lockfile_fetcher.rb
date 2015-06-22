@@ -31,7 +31,7 @@ module GemVersionCheck
       if GemVersionCheck.configuration.github_host == "github.com"
         "https://raw.#{GemVersionCheck.configuration.github_host}/#{@project}/master/Gemfile.lock"
       else
-        "https://#{GemVersionCheck.configuration.github_host}/#{@project}/raw/master/Gemfile.lock"
+        "https://#{GemVersionCheck.configuration.github_host}/raw/#{@project}/master/Gemfile.lock"
       end
     end
 
