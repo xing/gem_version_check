@@ -29,6 +29,10 @@ module GemVersionCheck
           options[:only] = list
         end
 
+        opts.on("--except gem1,gem2,gem3", Array, "List of ruby gems") do |list|
+          options[:except] = list
+        end
+
         opts.on("--host github.com", String, "Github host name") do |host|
           options[:host] = host
         end
