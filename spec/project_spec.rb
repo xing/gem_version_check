@@ -6,6 +6,7 @@ module GemVersionCheck
     let(:url) { "https://github.com/toadkicker/teststrap/raw/master/Gemfile.lock" }
     let(:redirect_url) { "https://raw.github.com/toadkicker/teststrap/master/Gemfile.lock" }
     let(:lock_file) { Lockfile.new(lock_file_content("rails_app_example.lock")) }
+    let(:options) { {} }
     let(:project) do
       Dependency.any_instance.stubs(:latest_version).returns("1.0")
       project = Project.new("toadkicker/teststrap", options)
@@ -34,8 +35,6 @@ module GemVersionCheck
       end
 
       context "without black- or whitelisting" do
-        let(:options) { {} }
-
         it "returns array of all dependencies" do
           project.report.size.should == 47
         end
@@ -60,10 +59,8 @@ module GemVersionCheck
       end
 
       context "without black- or whitelisting" do
-        let(:options) { {} }
         include_examples "check_failed"
       end
     end
-
   end
 end
