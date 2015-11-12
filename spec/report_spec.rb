@@ -8,7 +8,7 @@ module GemVersionCheck
       Project.any_instance.stubs(:report)
     end
 
-    let (:report) do
+    let(:report) do
       report = Report.new(%w(proj1, proj2))
       report.generate
       report

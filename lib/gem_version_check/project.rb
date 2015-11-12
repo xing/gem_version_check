@@ -5,9 +5,10 @@ require "net/https"
 module GemVersionCheck
   class Project
 
-    def initialize(project, spec_names = [])
+    def initialize(project, options = {})
       @project = project
-      @spec_names = spec_names
+      @only = options[:only] || []
+      @except = options[:except] || []
     end
 
     def name
@@ -66,7 +67,13 @@ module GemVersionCheck
     end
 
     def spec_names
-      @spec_names.any? ? @spec_names : all_spec_names
+      if @only.any?
+        @only
+      elsif @except.any?
+        all_spec_names - @except
+      else
+        all_spec_names
+      end
     end
 
     def all_spec_names

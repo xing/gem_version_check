@@ -28,6 +28,10 @@ Use --only option if you want to specify the list of gems
 
     gem_version_check fdietz/team_dashboard --only activesupport,rspec
 
+Use --except option if you want to exclude certain gems from the check
+
+    gem_version_check fdietz/team_dashboard --except activesupport,rspec
+
 Use --output-format if you want different formats
 
     gem_version_check fdietz/team_dashboard --output-format=json
