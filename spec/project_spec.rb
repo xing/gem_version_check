@@ -65,6 +65,15 @@ module GemVersionCheck
       context "without black- or whitelisting" do
         include_examples "check_failed"
       end
+
+      context "with unused gems" do
+        let(:options) { { only: %w(redis) } }
+
+        it "returns false if all used dependecies are up to date" do
+          project.check_failed?.should == false
+        end
+      end
+
     end
   end
 end

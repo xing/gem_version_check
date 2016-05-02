@@ -27,7 +27,7 @@ module GemVersionCheck
         dependency.check(lock_file)
         result << dependency
 
-        @check_failed = true unless dependency.valid?
+        @check_failed = true if dependency.used? && !dependency.valid?
       end
       result
     end
