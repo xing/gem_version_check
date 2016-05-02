@@ -43,24 +43,37 @@ module GemVersionCheck
 
     shared_examples "check_failed" do
       it "returns true if at least one dependency is not up to date or non existing" do
-        project.check_failed? == true
+        project.check_failed?.should == true
       end
     end
 
     context "#check_failed?" do
+      before do
+        project.generate_report
+      end
+
       context "with whitelisted gems" do
-        let(:options) { { only: "actionpack" } }
+        let(:options) { { only: %w(actionpack) } }
         include_examples "check_failed"
       end
 
       context "with blacklisted gems" do
-        let(:options) { { except: "actionpack" } }
+        let(:options) { { except: %w(actionpack) } }
         include_examples "check_failed"
       end
 
       context "without black- or whitelisting" do
         include_examples "check_failed"
       end
+
+      context "with unused gems" do
+        let(:options) { { only: %w(redis) } }
+
+        it "returns false if all used dependecies are up to date" do
+          project.check_failed?.should == false
+        end
+      end
+
     end
   end
 end
