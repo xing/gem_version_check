@@ -24,7 +24,7 @@ module GemVersionCheck
       end
 
       def project_title(project)
-        "Project: #{project.check_failed? ? red : green}#{project.name}#{black}" 
+        "Project: #{project.check_failed? ? red : green}#{project.name}#{color_reset}"
       end
 
       def dependency_listitem(dep)
@@ -42,15 +42,15 @@ module GemVersionCheck
       end
 
       def valid_dependency(dep)
-        "#{green}#{dep.expected_version} ✓#{black}"
+        "#{green}#{dep.expected_version} ✓#{color_reset}"
       end
 
       def invalid_dependency(dep)
-        "#{dep.expected_version} != #{red}✖ #{dep.version}#{black}"
+        "#{dep.expected_version} != #{red}✖ #{dep.version}#{color_reset}"
       end
 
-      def black
-        "\033[30m"
+      def color_reset
+        "\033[m"
       end
 
       def green
