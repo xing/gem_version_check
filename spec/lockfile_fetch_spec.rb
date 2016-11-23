@@ -32,6 +32,38 @@ module GemVersionCheck
       end
     end
 
+    describe "#content" do
+      let(:fetcher) { LockfileFetcher.new(project) }
+
+      context "when initialized with a URL" do
+        let(:project) { "https://raw.github.com/fdietz/team_dashboard/raw/master/Gemfile.lock" }
+
+        it "downloads content from url" do
+          fetcher.expects(:request).returns("")
+          fetcher.content
+        end
+      end
+
+      context "when initialized with a filename" do
+        context "when file exists" do
+          let(:project) { "Gemfile.lock" }
+
+          it "reads content from file" do
+            File.expects(:read).with(project)
+            fetcher.content
+          end
+        end
+
+        context "when file does not exist" do
+          let(:project) { "Dummy.lock" }
+
+          it "raises NotFoundError" do
+            fetcher.expects(:request).returns(nil)
+            expect { fetcher.content }.to raise_error(LockfileFetcher::NotFoundError)
+          end
+        end
+      end
+    end
   end
 end
 
