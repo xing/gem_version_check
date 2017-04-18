@@ -46,12 +46,12 @@ module GemVersionCheck
     private
 
     def with_progress_bar(elements)
-      pb = ProgressBar.new("Fetch specs", lock_file.total) if display_status?
+      pb = ProgressBar.create(:title => "Fetch specs", :total => lock_file.total) if display_status?
       elements.each do |el|
         yield el
-        pb.inc if display_status?
+        pb.increment if display_status?
       end
-      pb.clear if display_status?
+      pb.finish if display_status?
     end
 
     def allow_prerelease_dependencies?

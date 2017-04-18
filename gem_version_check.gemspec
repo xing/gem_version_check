@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mocha", "~> 0.13.0"
 
   s.add_runtime_dependency "bundler"
-  s.add_runtime_dependency "progressbar"
+  s.add_runtime_dependency "progressbar", "~> 1.8.2"
 end
