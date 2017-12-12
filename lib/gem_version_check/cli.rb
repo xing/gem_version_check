@@ -39,6 +39,10 @@ module GemVersionCheck
           options[:host] = host
         end
 
+        opts.on('--token access-token', String, 'Github access token') do |token|
+          options[:token] = token
+        end
+
         opts.on('--sources my.gems.org,rubygems.org', String, 'Sources to check for new gems versions') do |sources|
           options[:sources] = sources
         end
