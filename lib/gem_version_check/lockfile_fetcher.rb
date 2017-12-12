@@ -28,8 +28,11 @@ module GemVersionCheck
     # github enterprise does not redirect
     # TODO: change if github enterprise redirects too
     def gemfile_lock_url
+      token = GemVersionCheck.configuration.token
       if GemVersionCheck.configuration.github_host == "github.com"
         "https://raw.#{GemVersionCheck.configuration.github_host}/#{@project}/master/Gemfile.lock"
+      elsif token
+        "https://#{GemVersionCheck.configuration.github_host}/raw/#{@project}/master/Gemfile.lock?token=#{token}"
       else
         "https://#{GemVersionCheck.configuration.github_host}/raw/#{@project}/master/Gemfile.lock"
       end
