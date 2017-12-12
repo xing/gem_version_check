@@ -8,9 +8,13 @@ module GemVersionCheck
     end
 
     def content
-      uri = URI.parse(repository)
-      body = request(uri)
-      raise NotFoundError.new(repository) if body.nil?
+      if File.exists?(@project)
+        body = File.read(@project)
+      else
+        uri = URI.parse(repository)
+        body = request(uri)
+        raise NotFoundError.new(repository) if body.nil?
+      end
       body
     end
 

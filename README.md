@@ -18,6 +18,10 @@ Use any url to a Gemfile.lock:
 
     gem_version_check https://raw.github.com/fdietz/team_dashboard/raw/master/Gemfile.lock
 
+Use a local Gemfile.lock:
+
+    gem_version_check Gemfile.lock
+
 ## Configuration
 
 Use --host option if you use Enterprise Github:
